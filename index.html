@@ -1015,7 +1015,7 @@
             <textarea placeholder="Preferred date, time, number of players…"></textarea>
           </div>
           <button class="form-submit" type="submit">Send Booking Request →</button>
-          <div id="form-msg" style="display:none;font-size:13px;color:var(--green);margin-top:8px;">✓ Message sent! We'll be in touch shortly.</div>
+
         </form>
       </div>
     </div>
@@ -1051,13 +1051,28 @@
         : 'rgba(8,12,14,0.85)';
     });
 
-    // Form submit
+    // Form submit → WhatsApp redirect
     function handleSubmit(e) {
       e.preventDefault();
-      const msg = document.getElementById('form-msg');
-      msg.style.display = 'block';
-      e.target.reset();
-      setTimeout(() => msg.style.display = 'none', 5000);
+      const form = e.target;
+      const name    = form.querySelector('input[type="text"]').value.trim();
+      const phone   = form.querySelector('input[type="tel"]').value.trim();
+      const pkg     = form.querySelector('select').value;
+      const message = form.querySelector('textarea').value.trim();
+
+      const text = [
+        `🏏 *New Booking Request – Power Play Indoor Cricket*`,
+        ``,
+        `*Name:* ${name || '—'}`,
+        `*Phone:* ${phone || '—'}`,
+        `*Package:* ${pkg || '—'}`,
+        `*Message:* ${message || '—'}`,
+      ].join('\n');
+
+      const waNumber = '94716694825'; // Sri Lanka country code + number (no +)
+      const waURL = `https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`;
+
+      window.open(waURL, '_blank');
     }
   </script>
 </body>
